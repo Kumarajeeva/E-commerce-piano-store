@@ -14,10 +14,12 @@ const App = () => {
         const {data} = await commerce.products.list();
 
         setProducts(data);
-    }
+    }   
 
     const fetchCart = async () => {
         setCart(await commerce.cart.retrieve());
+
+        console.log(cart);
     }
 
     const handleAddToCart = async (productId, quantity) => {
@@ -64,6 +66,7 @@ const App = () => {
     useEffect(() => {
         fetchProducts();
         fetchCart();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [])
 
     console.log(cart.line_items);
@@ -71,7 +74,7 @@ const App = () => {
     return (
         <Router>
             <div>
-                <Navbar totalItems={cart.total_items}/>
+                <Navbar totalItems={cart.total_items} handleEmptyCart={handleEmptyCart} />
                 <Routes>
                     <Route path="/" element={<Products products={products} onAddToCart={handleAddToCart}/> } />
                         
@@ -94,7 +97,9 @@ const App = () => {
                     />
 
                     <Route path="/confirm" element={
-                        <ConfirmationPage/>} 
+                        <ConfirmationPage 
+                            handleEmptyCart={handleEmptyCart}
+                        />} 
                     />
 
                         
